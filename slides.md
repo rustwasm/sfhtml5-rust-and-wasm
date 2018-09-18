@@ -7,7 +7,7 @@ name: inverse
 layout: true
 class: left, middle, inverse
 
-.footnote[[bit.ly/TODO](https://bit.ly/TODO)]
+.footnote[[bit.ly/rust-and-wasm](https://bit.ly/rust-and-wasm)]
 
 ---
 
@@ -15,7 +15,7 @@ name: normal
 layout: true
 class: left, middle
 
-.footnote[[bit.ly/TODO](https://bit.ly/TODO)]
+.footnote[[bit.ly/rust-and-wasm](https://bit.ly/rust-and-wasm)]
 
 ---
 
@@ -28,7 +28,7 @@ class: middle, center
 
 ![rustwasmjs](public/img/rustwasmjs.png)
 
-.footnote[[bit.ly/TODO](https://bit.ly/TODO)]
+.footnote[[bit.ly/rust-and-wasm](https://bit.ly/rust-and-wasm)]
 
 ???
 

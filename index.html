@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rust 🦀 and WebAssembly 🕸 | SFHTML5</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" rel="stylesheet"/>
+    <link href="public/custom.css" type="text/css" rel="stylesheet">
+    <link rel="shortcut icon" href="/public/img/rust-logo-blk.svg" type="image/x-icon">
+    <style>
+     .inverse {
+         filter: invert(100%);
+     }
+
+     .footnote {
+         bottom:12px;
+         opacity:0.75;
+         position:absolute;
+         left:20px;
+     }
+
+     a[href$=".svg"] {
+         display: block;
+         max-width: 80%;
+         max-height: 80%;
+         margin: 0 auto;
+     }
+
+     a[href$=".svg"] > object {
+         pointer-events: none;
+     }
+
+     .remark-slide img {
+         max-width: 80%;
+         max-height: 80%;
+     }
+
+     .swing-crab-bg {
+         background: white url(./public/img/swinging-crab.jpg) no-repeat;
+         background-position: bottom right -30% !important;
+     }
+
+     .swing-crab-bg .remark-slide-content {
+         max-width: 50%;
+     }
+
+     blockquote {
+         font-style: italic;
+     }
+
+     blockquote::before {
+         content: '“';
+         opacity: .5;
+         font-size: 400%;
+         float: left;
+         margin-right: .25em;
+         margin-top: -.5em;
+     }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+    </textarea>
+    <script src="public/remark.js" type="text/javascript"></script>
+    <script type="text/javascript">
+     async function main() {
+         const slides = await fetch("./slides.md");
+         const slidesText = await slides.text();
+         document.getElementById("source").textContent = slidesText;
+         window.slideshow = remark.create();
+     }
+     main();
+    </script>
+  </body>
+</html>

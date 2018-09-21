@@ -70,19 +70,19 @@ class: center
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
 pub fn greet() {
-    web_sys::Window::alert_with_message("Hello, World!");
+    alert("Hello, World!");
 }
 ```
 
 ???
 
-1. `use` is bringing `wasm-bindgen`'s common functionality into scope
-2. exporting a `greet` function
-   * `#[wasm_bindgen]` on a function makes it an export in the `.wasm` binary
-3. `web_sys` crate provides bindings to DOM and Web APIs
-4. `web_sys::Window::alert_with_message` is calling the `window.alert` function with a
-   message
+* dive into hello world
 
 ---
 
@@ -90,19 +90,19 @@ pub fn greet() {
 *use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
 pub fn greet() {
-    web_sys::Window::alert_with_message("Hello, World!");
+    alert("Hello, World!");
 }
 ```
 
 ???
 
-1. `use` is bringing `wasm-bindgen`'s common functionality into scope
-2. exporting a `greet` function
-   * `#[wasm_bindgen]` on a function makes it an export in the `.wasm` binary
-3. `web_sys` crate provides bindings to DOM and Web APIs
-4. `web_sys::Window::alert_with_message` is calling the `window.alert` function with a
-   message
+* `use` is bringing `wasm-bindgen`'s common functionality into scope
 
 ---
 
@@ -110,19 +110,20 @@ pub fn greet() {
 use wasm_bindgen::prelude::*;
 
 *#[wasm_bindgen]
+*extern "C" {
+*   fn alert(s: &str);
+*}
+
+#[wasm_bindgen]
 pub fn greet() {
-    web_sys::Window::alert_with_message("Hello, World!");
+    alert("Hello, World!");
 }
 ```
 
 ???
 
-1. `use` is bringing `wasm-bindgen`'s common functionality into scope
-2. exporting a `greet` function
-   * `#[wasm_bindgen]` on a function makes it an export in the `.wasm` binary
-3. `web_sys` crate provides bindings to DOM and Web APIs
-4. `web_sys::Window::alert_with_message` is calling the `window.alert` function with a
-   message
+* importing the `window.alert` function
+* `#[wasm_bindgen]` on an `extern` block creates imports at the `.wasm` level
 
 ---
 
@@ -130,19 +131,41 @@ pub fn greet() {
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+}
+
+*#[wasm_bindgen]
 pub fn greet() {
-*   web_sys::Window::alert_with_message("Hello, World!");
+    alert("Hello, World!");
 }
 ```
 
 ???
 
-1. `use` is bringing `wasm-bindgen`'s common functionality into scope
-2. exporting a `greet` function
-   * `#[wasm_bindgen]` on a function makes it an export in the `.wasm` binary
-3. `web_sys` crate provides bindings to DOM and Web APIs
-4. `web_sys::Window::alert_with_message` is calling the `window.alert` function with a
-   message
+* exporting a `greet` function
+  * `#[wasm_bindgen]` on a `pub` function makes it an export in the `.wasm`
+    binary
+
+---
+
+```rust
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+}
+
+#[wasm_bindgen]
+pub fn greet() {
+*   alert("Hello, World!");
+}
+```
+
+???
+
+* calling imported `alert` function like we would any normal Rust function!
 
 ---
 
@@ -155,7 +178,8 @@ greet();
 ???
 
 * Rust-generated wasm is consumable as an ES module
-* Can't tell if `"./hello_world"` module is JS or wasm
+* just looking at this, we can't tell if the `"./hello_world"` module is JS or
+  wasm
   * this is the level of transparent, it-just-works integration we aim for
 
 ---
@@ -397,12 +421,21 @@ class: middle, center
 ```rust
 use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+}
+
 /// Make a greeting!
 #[wasm_bindgen]
 pub fn greet() {
-    web_sys::Window::alert_with_message("Hello, World!");
+    alert("Hello, World!");
 }
 ```
+
+???
+
+* take deeper look at hello world
 
 ---
 
@@ -429,16 +462,9 @@ class: center
 ```js
 // ...
 
-export function __widl_f_alert_with_message_(arg0, arg1, exnptr) {
+export function __wbg_alert_2c86be282863e459(arg0, arg1) {
     let varg0 = getStringFromWasm(arg0, arg1);
-    try {
-        alert(varg0);
-    } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
-    }
+    alert(varg0);
 }
 
 // ...
@@ -446,8 +472,8 @@ export function __widl_f_alert_with_message_(arg0, arg1, exnptr) {
 
 ???
 
-* generated JS file has glue for wrapping imported JS/DOM/Web functions and
-  translating their arguments into something that wasm-bindgen can understand
+* generated JS file has glue for wrapping imported functions and translating
+  their arguments into something that wasm-bindgen can understand
 
 ---
 
@@ -456,16 +482,9 @@ export function __widl_f_alert_with_message_(arg0, arg1, exnptr) {
 ```js
 // ...
 
-export function __widl_f_alert_with_message_(arg0, arg1, exnptr) {
+export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 *   let varg0 = getStringFromWasm(arg0, arg1);
-    try {
-        alert(varg0);
-    } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
-    }
+    alert(varg0);
 }
 
 // ...
@@ -482,16 +501,9 @@ export function __widl_f_alert_with_message_(arg0, arg1, exnptr) {
 ```js
 // ...
 
-export function __widl_f_alert_with_message_(arg0, arg1, exnptr) {
+export function __wbg_alert_2c86be282863e459(arg0, arg1) {
     let varg0 = getStringFromWasm(arg0, arg1);
-    try {
-*       alert(varg0);
-    } catch (e) {
-        const view = getUint32Memory();
-        view[exnptr / 4] = 1;
-        view[exnptr / 4 + 1] = addHeapObject(e);
-
-    }
+*   alert(varg0);
 }
 
 // ...
@@ -581,9 +593,10 @@ export function greet() {
 
 ```rust
 use wasm_bindgen::prelude::*;
+use web_sys::Node;
 
 #[wasm_bindgen]
-pub fn greet2(node: &web_sys::Node) {
+pub fn greet2(node: &Node) {
    node.set_text_content(Some("Hello, World!"));
 }
 ```
@@ -592,6 +605,8 @@ pub fn greet2(node: &web_sys::Node) {
 
 * this version of hello world is putting its greeting into some DOM node's text
   content
+* no more importing common Web functions by hand
+  * using `web_sys` instead
 
 ---
 
@@ -600,9 +615,10 @@ pub fn greet2(node: &web_sys::Node) {
 
 ```rust
 use wasm_bindgen::prelude::*;
+*use web_sys::Node;
 
 #[wasm_bindgen]
-*pub fn greet2(node: &web_sys::Node) {
+*pub fn greet2(node: &Node) {
    node.set_text_content(Some("Hello, World!"));
 }
 ```
@@ -618,9 +634,10 @@ use wasm_bindgen::prelude::*;
 
 ```rust
 use wasm_bindgen::prelude::*;
+use web_sys::Node;
 
 #[wasm_bindgen]
-pub fn greet2(node: &web_sys::Node) {
+pub fn greet2(node: &Node) {
 *  node.set_text_content(Some("Hello, World!"));
 }
 ```
@@ -1374,11 +1391,13 @@ console.log(stats.mean());
 
 ---
 
-### Managing Lifetimes from JS
-<br/>
-#### 🏗 &emsp; Component lifetime hooks
-#### 🥑 &emsp; `with` functions
-#### 🤸 &emsp; Future: GC weak refs and finalizers
+class: center
+
+## Managing Lifetimes from JavaScript
+<!-- <br/> -->
+<!-- #### 🏗 &emsp; Component lifetime hooks -->
+<!-- #### 🥑 &emsp; `with` functions -->
+<!-- #### 🤸 &emsp; *Future:* GC weak refs and finalizers -->
 
 ---
 
@@ -1446,7 +1465,7 @@ withStreamingStats(stats => {
 
 ---
 
-### Future: GC Weak Refs and Finalizers
+### *Future:* GC Weak Refs and Finalizers
 
 ---
 

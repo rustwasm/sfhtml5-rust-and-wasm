@@ -67,6 +67,8 @@ class: center
 
 ---
 
+class: rust-code
+
 ```rust
 use wasm_bindgen::prelude::*;
 
@@ -86,6 +88,8 @@ pub fn greet() {
 * dive into hello world
 
 ---
+
+class: rust-code
 
 ```rust
 *use wasm_bindgen::prelude::*;
@@ -107,6 +111,8 @@ pub fn greet() {
 
 ---
 
+class: rust-code
+
 ```rust
 use wasm_bindgen::prelude::*;
 
@@ -127,6 +133,8 @@ pub fn greet() {
 * `#[wasm_bindgen]` on an `extern` block creates imports at the `.wasm` level
 
 ---
+
+class: rust-code
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -150,6 +158,8 @@ pub fn greet() {
 
 ---
 
+class: rust-code
+
 ```rust
 use wasm_bindgen::prelude::*;
 
@@ -169,6 +179,8 @@ pub fn greet() {
 * calling imported `alert` function like we would any normal Rust function!
 
 ---
+
+class: js-code
 
 ```js
 import { greet } from "./hello_world";
@@ -219,7 +231,10 @@ class: middle, center
 
 ???
 
-* motivating example: speeding up the `source-map` library by integrating rust+wasm
+* motivating example: speeding up the `source-map` library by integrating
+  rust+wasm
+* source maps are debug info format for the Web
+  * map lines in minified JS back to the original, unminified JS
 * this experience ended up informing a lot of our WG's efforts
 * different direction from emscripten:
   * trying to integrate into JS ecosystem
@@ -427,6 +442,8 @@ class: middle, center
 
 ---
 
+class: rust-code
+
 ```rust
 use wasm_bindgen::prelude::*;
 
@@ -466,7 +483,9 @@ class: center
 
 ---
 
-### Generated JavaScript Bindings for `greet`
+class: js-code
+
+### Generated JS for `greet`
 
 ```js
 // ...
@@ -486,7 +505,9 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 ---
 
-### Generated JavaScript Bindings for `greet`
+class: js-code
+
+### Generated JS for `greet`
 
 ```js
 // ...
@@ -501,11 +522,16 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 ???
 
-* read a Rust string from wasm memory
+* recall from earlier talks that strings aren't simple in wasm
+* read a Rust string from wasm memory into a JS string
+* arg0 = pointer to start of string
+* arg1 = length of the string
 
 ---
 
-### Generated JavaScript Bindings for `greet`
+class: js-code
+
+### Generated JS for `greet`
 
 ```js
 // ...
@@ -524,7 +550,9 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 ---
 
-### Generated JavaScript Bindings for `greet`
+class: js-code
+
+### Generated JS for `greet`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -547,7 +575,9 @@ export function greet() {
 
 ---
 
-### Generated JavaScript Bindings for `greet`
+class: js-code
+
+### Generated JS for `greet`
 
 ```js
 *import * as wasm from './hello_world_bg';
@@ -569,7 +599,9 @@ export function greet() {
 
 ---
 
-### Generated JavaScript Bindings for `greet`
+class: js-code
+
+### Generated JS for `greet`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -597,6 +629,8 @@ export function greet() {
 
 ---
 
+class: rust-code
+
 ### Get a DOM node, set its `textContent`
 <br/>
 
@@ -619,6 +653,8 @@ pub fn greet2(node: &Node) {
 
 ---
 
+class: rust-code
+
 ### Get a DOM node, set its `textContent`
 <br/>
 
@@ -638,6 +674,8 @@ use wasm_bindgen::prelude::*;
 
 ---
 
+class: rust-code
+
 ### Get a DOM node, set its `textContent`
 <br/>
 
@@ -656,6 +694,8 @@ pub fn greet2(node: &Node) {
 * and setting its `textContent` to "Hello, World!"
 
 ---
+
+class: js-code
 
 ### Get a DOM node, set its `textContent`
 <br/>
@@ -682,7 +722,9 @@ class: center
 
 ---
 
-### Generated JavaScript Bindings for `greet2`
+class: js-code
+
+### Generated JS for `greet2`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -706,7 +748,9 @@ export function greet2(arg0) {
 
 ---
 
-### Generated JavaScript Bindings for `greet2`
+class: js-code
+
+### Generated JS for `greet2`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -740,6 +784,8 @@ class: center
 
 ---
 
+class: rust-code
+
 ### Taking ownership of DOM nodes
 
 ```rust
@@ -770,6 +816,8 @@ pub fn greet3(node: web_sys::Node) {
 
 ---
 
+class: rust-code
+
 ### Taking ownership of DOM nodes
 
 ```rust
@@ -796,6 +844,8 @@ thread_local! {
 * no more `&`; that's how you know we are taking ownership of the argument
 
 ---
+
+class: rust-code
 
 ### Taking ownership of DOM nodes
 
@@ -824,6 +874,8 @@ pub fn greet3(node: web_sys::Node) {
 
 ---
 
+class: rust-code
+
 ### Taking ownership of DOM nodes
 
 ```rust
@@ -850,6 +902,8 @@ pub fn greet3(node: web_sys::Node) {
 * we add this most recently given node
 
 ---
+
+class: rust-code
 
 ### Taking ownership of DOM nodes
 
@@ -891,7 +945,9 @@ class: center
 
 ---
 
-### Generated JavaScript Bindings for `greet3`
+class: js-code
+
+### Generated JS for `greet3`
 
 ```js
 /// ...
@@ -910,7 +966,9 @@ export function greet3(arg0) {
 
 ---
 
-### Generated JavaScript Bindings for `greet3`
+class: js-code
+
+### Generated JS for `greet3`
 
 ```js
 /// ...
@@ -939,6 +997,8 @@ class: middle, center
 
 ---
 
+class: rust-code
+
 ### Exposing Rust `struct`s to JavaScript
 
 ```rust
@@ -965,6 +1025,8 @@ pub struct StreamingStats {
 
 ---
 
+class: rust-code
+
 ### Exposing Rust `struct`s to JavaScript
 
 ```rust
@@ -980,6 +1042,8 @@ pub struct StreamingStats {
 * make sure struct has `#[wasm_bindgen]` annotation on it
 
 ---
+
+class: rust-code
 
 ### Exposing Rust `struct`s to JavaScript
 
@@ -998,6 +1062,8 @@ pub struct StreamingStats {
 
 ---
 
+class: rust-code
+
 ### Exposing Methods to JavaScript
 
 ```rust
@@ -1012,6 +1078,8 @@ impl StreamingStats {
 * let's also add a constructor and some methods
 
 ---
+
+class: rust-code
 
 ### Exposing Methods to JavaScript
 
@@ -1030,6 +1098,8 @@ impl StreamingStats {
       * as a method on the generated ES class
 
 ---
+
+class: rust-code
 
 ### Exposing Methods to JavaScript
 
@@ -1059,6 +1129,8 @@ impl StreamingStats {
 
 ---
 
+class: rust-code
+
 ### Exposing Methods to JavaScript
 
 ```rust
@@ -1086,6 +1158,8 @@ impl StreamingStats {
 
 ---
 
+class: rust-code
+
 ### Exposing a Constructor to JavaScript
 
 ```rust
@@ -1110,6 +1184,8 @@ impl StreamingStats {
 
 ---
 
+class: rust-code
+
 ### Exposing a Constructor to JavaScript
 
 ```rust
@@ -1132,6 +1208,8 @@ impl StreamingStats {
 * static `new` function that returns `Self` type
 
 ---
+
+class: rust-code
 
 ### Exposing a Constructor to JavaScript
 
@@ -1166,7 +1244,9 @@ class: center
 
 ---
 
-### Generated JavaScript Bindings for `StreamingStats`
+class: js-code
+
+### Generated JS for `StreamingStats`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1195,7 +1275,9 @@ export class StreamingStats {
 
 ---
 
-### Generated JavaScript Bindings for `StreamingStats`
+class: js-code
+
+### Generated JS for `StreamingStats`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1227,7 +1309,9 @@ export class StreamingStats {
 
 ---
 
-### Generated JavaScript Bindings for `StreamingStats`
+class: js-code
+
+### Generated JS for `StreamingStats`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1258,7 +1342,9 @@ export class StreamingStats {
 
 ---
 
-### Generated JavaScript Bindings for `StreamingStats`
+class: js-code
+
+### Generated JS for `StreamingStats`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1292,6 +1378,8 @@ export class StreamingStats {
 
 ---
 
+class: js-code
+
 ### Using `StreamingStats` from JavaScript
 
 ```js
@@ -1313,6 +1401,8 @@ stats.free();
 * let's take a look at how we use `StreamingStats` from JS
 
 ---
+
+class: js-code
 
 ### Using `StreamingStats` from JavaScript
 
@@ -1336,6 +1426,8 @@ stats.free();
 
 ---
 
+class: js-code
+
 ### Using `StreamingStats` from JavaScript
 
 ```js
@@ -1358,6 +1450,8 @@ stats.free();
 
 ---
 
+class: js-code
+
 ### Using `StreamingStats` from JavaScript
 
 ```js
@@ -1379,6 +1473,8 @@ stats.free();
 * calling the `add` or `mean` method is just liek any plain JS class as well
 
 ---
+
+class: js-code
 
 ### Using `StreamingStats` from JavaScript
 
@@ -1413,6 +1509,8 @@ class: center
 
 ---
 
+class: js-code
+
 ### Component Lifecycle Hooks
 
 ```js
@@ -1435,6 +1533,8 @@ class StreamingStatsElement {
 * or `componentDidMount` and `componentWillUnmount` for React
 
 ---
+
+class: js-code
 
 ### `with` Functions
 
@@ -1460,6 +1560,8 @@ function withStreamingStats(callback) {
 * can also have `async`/`await` version
 
 ---
+
+class: js-code
 
 ### `with` Functions
 

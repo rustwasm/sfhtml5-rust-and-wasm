@@ -32,7 +32,8 @@ class: middle, center
 
 ???
 
-* rust+wasm WG
+* I'm lead of the rust+wasm WG
+* we are making wasm awesome via rust
 
 ---
 
@@ -70,7 +71,7 @@ class: center
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-extern "C" {
+extern {
     fn alert(s: &str);
 }
 
@@ -90,7 +91,7 @@ pub fn greet() {
 *use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-extern "C" {
+extern {
     fn alert(s: &str);
 }
 
@@ -110,7 +111,7 @@ pub fn greet() {
 use wasm_bindgen::prelude::*;
 
 *#[wasm_bindgen]
-*extern "C" {
+*extern {
 *   fn alert(s: &str);
 *}
 
@@ -131,7 +132,7 @@ pub fn greet() {
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-extern "C" {
+extern {
     fn alert(s: &str);
 }
 
@@ -153,7 +154,7 @@ pub fn greet() {
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-extern "C" {
+extern {
     fn alert(s: &str);
 }
 
@@ -277,6 +278,17 @@ class: middle, swing-crab-bg
 
 ---
 
+template: none
+class: center, middle
+
+<video src="./public/img/cake.mp4" autoplay="" loop="" playsinline=""></video>
+
+???
+
+* have our cake and eat it too
+
+---
+
 ## Control Over
 <br/>
 #### ✔ Memory layout and indirections
@@ -285,8 +297,6 @@ class: middle, swing-crab-bg
 #### ✔ Inlining
 
 ---
-
-<video style="float:right; max-width: 50%" src="./public/img/cake.mp4" autoplay="" loop="" playsinline=""></video>
 
 ## Zero-overhead abstractions
 <br/>
@@ -349,9 +359,8 @@ class: middle, center
 
 ## Plays Well With Others
 <br/>
-#### ✔ Integrates with bundlers (e.g. Webpack)
+#### ✔ Integrates with bundlers
 #### ✔ Publish to NPM
-<br/>
 <video style="margin: 0 auto; display: block" src="./public/img/lion-dog-kiss.mp4" autoplay="" loop="" playsinline=""></video>
 
 ???
@@ -365,7 +374,7 @@ class: middle, center
 
 ## Small `.wasm` Sizes
 <br/>
-#### *Example:* Using `document.querySelectorAll` doesn't entrench code for `window.alert`
+#### *Example:* Using `document.querySelectorAll` doesn't pull in code for `window.alert`
 <br/>
 > What you don’t use, you don’t pay for.
 
@@ -399,7 +408,6 @@ class: middle, center
 ### 👷 Building `.wasm`
 ### 🎁 Creating and publishing NPM packages
 ### <img src="./public/img/female-scientist.png" style="max-height: 1em; max-width: 1em"/> Testing in headless browsers
-### 📝 All your last-mile tasks
 
 ---
 
@@ -411,10 +419,11 @@ class: middle, center
 
 * facilitates communication between wasm and JS
 * "bindgen" = "bindings generator"
-* exported wasm functions only take `i32`/`i64`/`f32`/`f64`
+* exported wasm functions only take primitive number types
   * but we want to pass strings, objects, DOM nodes, etc
   * wasm-bindgen enables that, all with the zero-overhead abstraction principle
     we keep revisiting
+  * generates JS glue you would otherwise have to write by hand
 
 ---
 
@@ -422,7 +431,7 @@ class: middle, center
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-extern "C" {
+extern {
     fn alert(s: &str);
 }
 
@@ -457,7 +466,7 @@ class: center
 
 ---
 
-### Generated Bindings for `greet`
+### Generated JavaScript Bindings for `greet`
 
 ```js
 // ...
@@ -477,7 +486,7 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 ---
 
-### Generated Bindings for `greet`
+### Generated JavaScript Bindings for `greet`
 
 ```js
 // ...
@@ -496,7 +505,7 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 ---
 
-### Generated Bindings for `greet`
+### Generated JavaScript Bindings for `greet`
 
 ```js
 // ...
@@ -515,7 +524,7 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 ---
 
-### Generated Bindings for `greet`
+### Generated JavaScript Bindings for `greet`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -538,7 +547,7 @@ export function greet() {
 
 ---
 
-### Generated Bindings for `greet`
+### Generated JavaScript Bindings for `greet`
 
 ```js
 *import * as wasm from './hello_world_bg';
@@ -560,7 +569,7 @@ export function greet() {
 
 ---
 
-### Generated Bindings for `greet`
+### Generated JavaScript Bindings for `greet`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -667,13 +676,13 @@ greet2(document.body);
 
 class: center
 
-### `wasm-pack build`
-
+# `wasm-pack build`
+<br/>
 <video src="./public/img/excited-corgi.mp4" autoplay="" loop="" playsinline=""></video>
 
 ---
 
-### Generated Bindings for `greet2`
+### Generated JavaScript Bindings for `greet2`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -697,7 +706,7 @@ export function greet2(arg0) {
 
 ---
 
-### Generated Bindings for `greet2`
+### Generated JavaScript Bindings for `greet2`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -872,8 +881,8 @@ pub fn greet3(node: web_sys::Node) {
 
 class: center
 
-### `wasm-pack build`
-
+# `wasm-pack build`
+<br/>
 <video src="./public/img/breakdance.mp4" autoplay="" loop="" playsinline=""></video>
 
 ???
@@ -882,7 +891,7 @@ class: center
 
 ---
 
-### Generated Bindings for `greet3`
+### Generated JavaScript Bindings for `greet3`
 
 ```js
 /// ...
@@ -901,7 +910,7 @@ export function greet3(arg0) {
 
 ---
 
-### Generated Bindings for `greet3`
+### Generated JavaScript Bindings for `greet3`
 
 ```js
 /// ...
@@ -924,11 +933,9 @@ export function greet3(arg0) {
 ---
 
 template: inverse
-class: center
+class: middle, center
 
 ## Rust's ownership model helps us optimize Wasm ↔ JavaScript
-<br/>
-<video class="inverse" src="./public/img/portlandia-mindblown.mp4" autoplay="" loop="" playsinline=""></video>
 
 ---
 
@@ -1153,13 +1160,13 @@ impl StreamingStats {
 
 class: center
 
-### `wasm-pack build`
-
-<video src="./public/img/qe-excitement.mp4" autoplay="" loop="" playsinline=""></video>
+# `wasm-pack build`
+<br/>
+<video src="./public/img/zoidberg.mp4" autoplay="" loop="" playsinline=""></video>
 
 ---
 
-### Generated Bindings for `StreamingStats`
+### Generated JavaScript Bindings for `StreamingStats`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1188,7 +1195,7 @@ export class StreamingStats {
 
 ---
 
-### Generated Bindings for `StreamingStats`
+### Generated JavaScript Bindings for `StreamingStats`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1220,7 +1227,7 @@ export class StreamingStats {
 
 ---
 
-### Generated Bindings for `StreamingStats`
+### Generated JavaScript Bindings for `StreamingStats`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1251,7 +1258,7 @@ export class StreamingStats {
 
 ---
 
-### Generated Bindings for `StreamingStats`
+### Generated JavaScript Bindings for `StreamingStats`
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1292,8 +1299,9 @@ import { StreamingStats } from "./streaming_stats";
 
 const stats = new StreamingStats();
 
-for (let i = 0; i < 1000; i++)
+for (let i = 0; i < 1000; i++) {
   stats.add(Math.random());
+}
 
 console.log(stats.mean());
 
@@ -1313,8 +1321,9 @@ stats.free();
 
 const stats = new StreamingStats();
 
-for (let i = 0; i < 1000; i++)
+for (let i = 0; i < 1000; i++) {
   stats.add(Math.random());
+}
 
 console.log(stats.mean());
 
@@ -1334,8 +1343,9 @@ import { StreamingStats } from "./streaming_stats";
 
 *const stats = new StreamingStats();
 
-for (let i = 0; i < 1000; i++)
+for (let i = 0; i < 1000; i++) {
   stats.add(Math.random());
+}
 
 console.log(stats.mean());
 
@@ -1355,8 +1365,9 @@ import { StreamingStats } from "./streaming_stats";
 
 const stats = new StreamingStats();
 
-for (let i = 0; i < 1000; i++)
+for (let i = 0; i < 1000; i++) {
 * stats.add(Math.random());
+}
 
 *console.log(stats.mean());
 
@@ -1376,8 +1387,9 @@ import { StreamingStats } from "./streaming_stats";
 
 const stats = new StreamingStats();
 
-for (let i = 0; i < 1000; i++)
+for (let i = 0; i < 1000; i++) {
   stats.add(Math.random());
+}
 
 console.log(stats.mean());
 
@@ -1395,16 +1407,16 @@ class: center
 
 ## Managing Lifetimes from JavaScript
 <!-- <br/> -->
-<!-- #### 🏗 &emsp; Component lifetime hooks -->
+<!-- #### 🏗 &emsp; Component lifecycle hooks -->
 <!-- #### 🥑 &emsp; `with` functions -->
 <!-- #### 🤸 &emsp; *Future:* GC weak refs and finalizers -->
 
 ---
 
-### Component Lifetime Hooks
+### Component Lifecycle Hooks
 
 ```js
-class MyCustomElement {
+class StreamingStatsElement {
   connectedCallback() {
     this.stats = new StreamingStats();
   }
@@ -1420,18 +1432,17 @@ class MyCustomElement {
 ???
 
 * use webcomponents and custom elements component lifetime callbacks
-* similar hooks for React components
-  * `componentMounted` or whatever
+* or `componentDidMount` and `componentWillUnmount` for React
 
 ---
 
 ### `with` Functions
 
 ```js
-function withStreamingStats(f) {
+function withStreamingStats(callback) {
   const stats = new StreamingStats();
   try {
-    f(stats);
+    return callback(stats);
   } finally {
     stats.free();
   }
@@ -1442,9 +1453,11 @@ function withStreamingStats(f) {
 
 * similar to Python's `with` statement
 * RAII in JS
-* can also have `async` function version
-* execute the callback `f` and make sure that resource is properly freed at the
-  end
+* creates a resource
+* invokes callback with the resource
+* ensures that the resource is always cleaned up afterwards
+  * as a user, you don't have to clean it up yourself
+* can also have `async`/`await` version
 
 ---
 
@@ -1461,11 +1474,22 @@ withStreamingStats(stats => {
 
 ???
 
-* todo
+* can use `stats` inside the callback
+* but `stats` is always cleaned up once the callback returns
+* so you can't use it outside the callback
 
 ---
 
-### *Future:* GC Weak Refs and Finalizers
+### *Future:* [TC39 Weak Refs and Finalizers](https://github.com/tc39/proposal-weakrefs)
+<br/>
+#### ✨ We'll get the garbage collector to clean up after us ✨
+
+???
+
+* register a cleanup function for our objects
+* when the collector reclaims one of our objects, it will run the clean up
+  function for us
+* so we don't have to remember to do it ourselves
 
 ---
 
@@ -1475,7 +1499,14 @@ class: center
 
 <img src="./public/img/bigbird.gif" style="max-height: 50%; max-width: 50%"/>
 
+???
+
+* let's peak under the hood
+* see how the sausage is made
+
 ---
+
+TODO
 
 ---
 

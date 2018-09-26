@@ -352,11 +352,16 @@ class: center, middle
     * no allocations
   * Example 3: a function that is generic over some type, monomorphized it is as
     if you wrote versions specialized to the generic input by hand
+* also extends to `.wasm` code size as well
+  * built-in tree shaking and dead code elimination
 
 ---
 
 class: middle, center
 
+<div style="white-space:pre-wrap; font-size: 80%; margin-top: -5%">
+  <span style="width: 1em; height: 1em; background-color: #f8766d; display: inline-block"></span> = pure JavaScript &Tab; &Tab; <span style="width: 1em; height: 1em; background-color: #00bfc4; display: inline-block"></span> = w/ Rust and Wasm
+</div>
 <a href="./public/img/pause-at-exception.svg">
   <object data="./public/img/pause-at-exception.svg" type="image/svg+xml"></object>
 </a>
@@ -369,9 +374,12 @@ class: middle, center
   * red = original, pure-JS implementation
   * blue = new hybrid implementation with rust+wasm for core, perf-sensitive
     code paths
+  * chrome, firefox, safari
 * straight port led to ~6x faster than original implementation
 * further algorithmic improvements got it up to ~11x faster (not reflected in
   this graph)
+* and this is *after* we had already spent time optimizing the pure-JS over the
+  years
 * relative standard deviations fell: samples are much tighter together now
 * still a JS library! just core compute-bound kernel in rust+wasm
 * Ultimately:
@@ -403,6 +411,8 @@ class: middle, center
 
 ---
 
+exclude: true
+
 ## Small `.wasm` Sizes
 <br/>
 #### *Example:* Using `document.querySelectorAll` doesn't pull in code for `window.alert`
@@ -423,6 +433,16 @@ class: middle, center
       * you have to include a whole 'nother GC and language runtime in the wasm
       * your download size explodes
       * and page loads take forever
+
+---
+
+### 🛠 Top-notch tooling (e.g. `cargo`)
+### 🤸 Strong safety net
+### 😍 Welcoming, inclusive community
+
+???
+
+* compared
 
 ---
 
@@ -1016,6 +1036,8 @@ class: middle, center
 
 ---
 
+---
+
 class: js-code
 
 .filename[index.js]
@@ -1036,7 +1058,17 @@ stats.free();
 
 ???
 
-* let's take a look at how we use `StreamingStats` from JS
+* let's take a look at a slightly more involved example: exposing a Rust
+  struct+methods to JS
+* this example is going to track some statistics in streaming fashion
+  * not keeping all samples around, hogging a bunch of memory
+      * mean = sum of samples / number of samples
+      * can just store
+        1. sum of samples and
+        2. number of samples
+      * and then compute mean without every sample all at the same time
+  * maybe useful for an FPS counter or something like that
+  * we could also compute variance, stddev, min, max, etc
 
 ---
 
@@ -1151,17 +1183,7 @@ pub struct StreamingStats {
 
 ???
 
-* let's take a look at a slightly more involved example: exposing a Rust
-  struct+methods to JS
-* this example is going to track some statistics in streaming fashion
-  * not keeping all samples around, hogging a bunch of memory
-      * mean = sum of samples / number of samples
-      * can just store
-        1. sum of samples and
-        2. number of samples
-      * and then compute mean without every sample all at the same time
-  * maybe useful for an FPS counter or something like that
-  * we could also compute variance, stddev, min, max, etc
+* let's look at the Rust code for implementing `StreamingStats`
 
 ---
 

@@ -67,9 +67,28 @@ class: center
 
 ---
 
+class: js-code
+
+.filename[index.js]
+
+```js
+import { greet } from "./pkg/greet";
+
+greet();
+```
+
+???
+
+* Rust-generated wasm is consumable as an ES module
+* just looking at this, we can't tell if the `"./hello_world"` module is JS or
+  wasm
+  * this is the level of transparent, it-just-works integration we aim for
+
+---
+
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -93,7 +112,7 @@ pub fn greet() {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet.rs]
 
 ```rust
 *use wasm_bindgen::prelude::*;
@@ -121,7 +140,7 @@ pub fn greet() {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -147,7 +166,7 @@ pub fn greet() {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -173,7 +192,7 @@ pub fn greet() {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -192,25 +211,6 @@ pub fn greet() {
 ???
 
 * calling imported `alert` function like we would any normal Rust function!
-
----
-
-class: js-code
-
-.filename[index.js]
-
-```js
-import { greet } from "./hello_world";
-
-greet();
-```
-
-???
-
-* Rust-generated wasm is consumable as an ES module
-* just looking at this, we can't tell if the `"./hello_world"` module is JS or
-  wasm
-  * this is the level of transparent, it-just-works integration we aim for
 
 ---
 
@@ -325,14 +325,11 @@ class: center, middle
 #### ✔ Memory layout and indirections
 #### ✔ Allocation and deallocation
 #### ✔ Monomorphization vs. dynamic dispatch
-#### ✔ Inlining
+#### ✔ Function inlining
 
 ---
 
 ## Zero-overhead abstractions
-<br/>
-#### `Result<T, E>`
-#### `Iterator<Item = T>`
 
 <br/>
 
@@ -350,7 +347,10 @@ class: center, middle
 * Rust has "zero-overhead abstractions"
   * Example 1: if we tried to make a `Result` type in JS, it implies heap
     allocation
-  * Example 2: a function that is generic over some type, monomorphized it is as
+  * Example 2: array protocol in JS vs rust
+    * inlined functions
+    * no allocations
+  * Example 3: a function that is generic over some type, monomorphized it is as
     if you wrote versions specialized to the generic input by hand
 
 ---
@@ -444,7 +444,7 @@ class: middle, center
 
 # `wasm-bindgen`
 <br/>
-## Wasm<sup>💬 🗨</sup>JavaScript
+## Wasm<sup style="font-size: 150%">💬 🗨</sup>JavaScript
 
 ???
 
@@ -460,7 +460,7 @@ class: middle, center
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -503,7 +503,7 @@ class: center
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet.js]
 
 ```js
 // ...
@@ -525,7 +525,7 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet.js]
 
 ```js
 // ...
@@ -549,7 +549,7 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet.js]
 
 ```js
 // ...
@@ -570,10 +570,10 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet.js]
 
 ```js
-import * as wasm from './hello_world_bg';
+import * as wasm from './greet_bg';
 
 // ...
 
@@ -595,10 +595,10 @@ export function greet() {
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet.js]
 
 ```js
-*import * as wasm from './hello_world_bg';
+*import * as wasm from './greet_bg';
 
 // ...
 
@@ -619,10 +619,10 @@ export function greet() {
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet.js]
 
 ```js
-import * as wasm from './hello_world_bg';
+import * as wasm from './greet_bg';
 
 // ...
 
@@ -647,9 +647,29 @@ export function greet() {
 
 ---
 
+class: js-code
+
+.filename[index.js]
+
+```js
+import { greet2 } from "./pkg/greet2";
+
+greet2(document.body);
+```
+
+???
+
+* this version of hello world is putting its greeting into some DOM node's text
+  content
+* to call this version of the function, we need to pass a DOM node
+* we don't have to do anything fancy to pass the DOM node to wasm, the generated
+  JS takes care of that
+
+---
+
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet2.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -663,8 +683,6 @@ pub fn greet2(node: &Node) {
 
 ???
 
-* this version of hello world is putting its greeting into some DOM node's text
-  content
 * no more importing common Web functions by hand
   * using `web_sys` instead
 
@@ -672,7 +690,7 @@ pub fn greet2(node: &Node) {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet2.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -686,13 +704,14 @@ use wasm_bindgen::prelude::*;
 
 ???
 
-* now we are taking a DOM node parameter
+* now we are taking a reference to a DOM node parameter
+  * we know it is a reference because of the `&`
 
 ---
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet2.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -710,24 +729,6 @@ pub fn greet2(node: &Node) {
 
 ---
 
-class: js-code
-
-.filename[index.js]
-
-```js
-import { greet2 } from "./hello_world";
-
-greet2(document.body);
-```
-
-???
-
-* to call this version of the function, we need to pass a DOM node
-* we don't have to do anything fancy to pass the DOM node to wasm, the generated
-  JS takes care of that
-
----
-
 class: center
 
 # `wasm-pack build`
@@ -738,10 +739,10 @@ class: center
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet2.js]
 
 ```js
-import * as wasm from './hello_world_bg';
+import * as wasm from './greet2_bg';
 
 // ...
 
@@ -764,10 +765,10 @@ export function greet2(arg0) {
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet2.js]
 
 ```js
-import * as wasm from './hello_world_bg';
+import * as wasm from './greet2_bg';
 
 // ...
 
@@ -800,7 +801,7 @@ class: center
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet3.rs]
 
 ```rust
 thread_local! {
@@ -832,7 +833,7 @@ pub fn greet3(node: web_sys::Node) {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet3.rs]
 
 ```rust
 thread_local! {
@@ -861,7 +862,7 @@ thread_local! {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet3.rs]
 
 ```rust
 *thread_local! {
@@ -890,7 +891,7 @@ pub fn greet3(node: web_sys::Node) {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet3.rs]
 
 ```rust
 thread_local! {
@@ -919,7 +920,7 @@ pub fn greet3(node: web_sys::Node) {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/greet3.rs]
 
 ```rust
 thread_local! {
@@ -961,9 +962,11 @@ class: center
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet3.js]
 
 ```js
+import * as wasm from './greet3_bg';
+
 /// ...
 
 export function greet3(arg0) {
@@ -982,9 +985,11 @@ export function greet3(arg0) {
 
 class: js-code
 
-.filename[pkg/hello_world.js]
+.filename[pkg/greet3.js]
 
 ```js
+import * as wasm from './greet3_bg';
+
 /// ...
 
 export function greet3(arg0) {
@@ -1011,9 +1016,130 @@ class: middle, center
 
 ---
 
+class: js-code
+
+.filename[index.js]
+
+```js
+import { StreamingStats } from "./pkg/streaming_stats";
+
+const stats = new StreamingStats();
+
+for (let i = 0; i < 1000; i++) {
+  stats.add(Math.random());
+}
+
+console.log(stats.mean());
+
+stats.free();
+```
+
+???
+
+* let's take a look at how we use `StreamingStats` from JS
+
+---
+
+class: js-code
+
+.filename[index.js]
+
+```js
+*import { StreamingStats } from "./pkg/streaming_stats";
+
+const stats = new StreamingStats();
+
+for (let i = 0; i < 1000; i++) {
+  stats.add(Math.random());
+}
+
+console.log(stats.mean());
+
+stats.free();
+```
+
+???
+
+* again, using ES modules to import the `StreamingStats` ES class
+
+---
+
+class: js-code
+
+.filename[index.js]
+
+```js
+import { StreamingStats } from "./pkg/streaming_stats";
+
+*const stats = new StreamingStats();
+
+for (let i = 0; i < 1000; i++) {
+  stats.add(Math.random());
+}
+
+console.log(stats.mean());
+
+stats.free();
+```
+
+???
+
+* constructing is just like any plain JS class
+
+---
+
+class: js-code
+
+.filename[index.js]
+
+```js
+import { StreamingStats } from "./pkg/streaming_stats";
+
+const stats = new StreamingStats();
+
+for (let i = 0; i < 1000; i++) {
+* stats.add(Math.random());
+}
+
+*console.log(stats.mean());
+
+stats.free();
+```
+
+???
+
+* calling the `add` or `mean` method is just liek any plain JS class as well
+
+---
+
+class: js-code
+
+.filename[index.js]
+
+```js
+import { StreamingStats } from "./pkg/streaming_stats";
+
+const stats = new StreamingStats();
+
+for (let i = 0; i < 1000; i++) {
+  stats.add(Math.random());
+}
+
+console.log(stats.mean());
+
+*stats.free();
+```
+
+???
+
+* the only different thing is that you have to remember to call `free` when
+  you're done with it.
+
+---
+
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1041,7 +1167,7 @@ pub struct StreamingStats {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 *#[wasm_bindgen]
@@ -1059,7 +1185,7 @@ pub struct StreamingStats {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1078,7 +1204,7 @@ class: rust-code
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1095,7 +1221,7 @@ impl StreamingStats {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 *#[wasm_bindgen]
@@ -1115,7 +1241,7 @@ impl StreamingStats {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 // ...
@@ -1145,7 +1271,7 @@ impl StreamingStats {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 // ...
@@ -1174,7 +1300,7 @@ impl StreamingStats {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1200,7 +1326,7 @@ impl StreamingStats {
 
 class: rust-code
 
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1224,7 +1350,7 @@ impl StreamingStats {
 ---
 
 class: rust-code
-.filename[src/lib.rs]
+.filename[src/streaming_stats.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1262,7 +1388,7 @@ class: js-code
 .filename[pkg/streaming_stats.js]
 
 ```js
-import * as wasm from './hello_world_bg';
+import * as wasm from './streaming_stats_bg';
 
 export class StreamingStats {
     constructor() {
@@ -1293,7 +1419,7 @@ class: js-code
 .filename[pkg/streaming_stats.js]
 
 ```js
-import * as wasm from './hello_world_bg';
+import * as wasm from './streaming_stats_bg';
 
 export class StreamingStats {
     constructor() {
@@ -1327,7 +1453,7 @@ class: js-code
 .filename[pkg/streaming_stats.js]
 
 ```js
-import * as wasm from './hello_world_bg';
+import * as wasm from './streaming_stats_bg';
 
 export class StreamingStats {
 *   constructor() {
@@ -1360,7 +1486,7 @@ class: js-code
 .filename[pkg/streaming_stats.js]
 
 ```js
-import * as wasm from './hello_world_bg';
+import * as wasm from './streaming_stats_bg';
 
 export class StreamingStats {
     constructor() {
@@ -1391,127 +1517,6 @@ export class StreamingStats {
 
 ---
 
-class: js-code
-
-.filename[index.js]
-
-```js
-import { StreamingStats } from "./streaming_stats";
-
-const stats = new StreamingStats();
-
-for (let i = 0; i < 1000; i++) {
-  stats.add(Math.random());
-}
-
-console.log(stats.mean());
-
-stats.free();
-```
-
-???
-
-* let's take a look at how we use `StreamingStats` from JS
-
----
-
-class: js-code
-
-.filename[index.js]
-
-```js
-*import { StreamingStats } from "./streaming_stats";
-
-const stats = new StreamingStats();
-
-for (let i = 0; i < 1000; i++) {
-  stats.add(Math.random());
-}
-
-console.log(stats.mean());
-
-stats.free();
-```
-
-???
-
-* again, using ES modules to import the `StreamingStats` ES class
-
----
-
-class: js-code
-
-.filename[index.js]
-
-```js
-import { StreamingStats } from "./streaming_stats";
-
-*const stats = new StreamingStats();
-
-for (let i = 0; i < 1000; i++) {
-  stats.add(Math.random());
-}
-
-console.log(stats.mean());
-
-stats.free();
-```
-
-???
-
-* constructing is just like any plain JS class
-
----
-
-class: js-code
-
-.filename[index.js]
-
-```js
-import { StreamingStats } from "./streaming_stats";
-
-const stats = new StreamingStats();
-
-for (let i = 0; i < 1000; i++) {
-* stats.add(Math.random());
-}
-
-*console.log(stats.mean());
-
-stats.free();
-```
-
-???
-
-* calling the `add` or `mean` method is just liek any plain JS class as well
-
----
-
-class: js-code
-
-.filename[index.js]
-
-```js
-import { StreamingStats } from "./streaming_stats";
-
-const stats = new StreamingStats();
-
-for (let i = 0; i < 1000; i++) {
-  stats.add(Math.random());
-}
-
-console.log(stats.mean());
-
-*stats.free();
-```
-
-???
-
-* the only different thing is that you have to remember to call `free` when
-  you're done with it.
-
----
-
 class: center
 
 ## Managing Lifetimes from JavaScript
@@ -1524,9 +1529,7 @@ class: center
 
 class: js-code
 
-### Component Lifecycle Hooks
-
-.filename[streaming-stats-element.js]
+.filename[component-lifecycle-hooks.js]
 
 ```js
 class StreamingStatsElement {
@@ -1551,9 +1554,7 @@ class StreamingStatsElement {
 
 class: js-code
 
-### `with` Functions
-
-.filename[with-streaming-stats.js]
+.filename[with-functions.js]
 
 ```js
 export function withStreamingStats(callback) {
@@ -1580,9 +1581,7 @@ export function withStreamingStats(callback) {
 
 class: js-code
 
-### `with` Functions
-
-.filename[index.js]
+.filename[with-functions.js]
 
 ```js
 withStreamingStats(stats => {
@@ -1601,6 +1600,8 @@ withStreamingStats(stats => {
 * so you can't use it outside the callback
 
 ---
+
+class: center
 
 ### *Future:* [TC39 Weak Refs and Finalizers](https://github.com/tc39/proposal-weakrefs)
 <br/>
@@ -1630,8 +1631,12 @@ class: center
 
 TODO:
 
-* finish filename fixing up (give each example different file name)
 * https://gist.github.com/fitzgen/81a1a2fe8a66ce8f38e5281235c227c0
+
+---
+
+* wish that WebIDL would specify whether buffer source is const or not
+* wish that TypeScript included whether a method throws or not
 
 ---
 
@@ -1646,6 +1651,10 @@ class: center
 # [Join the Rust and Wasm Working Group!](https://github.com/rustwasm/team/blob/master/README.md#get-involved)
 
 <img src="./public/img/wasmwg.png" style="max-width: 50%; max-height: 50%"/>
+
+???
+
+* we don't bite, but we do hug
 
 ---
 

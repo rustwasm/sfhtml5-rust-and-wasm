@@ -1632,6 +1632,10 @@ class: center
 TODO:
 
 * https://gist.github.com/fitzgen/81a1a2fe8a66ce8f38e5281235c227c0
+* more focus on _rust_ and wasm
+* show hello world alert
+* conclude and hammer home points
+* s/deeper dive/what happens for you for integration/
 
 ---
 

@@ -69,6 +69,8 @@ class: center
 
 class: rust-code
 
+.filename[src/lib.rs]
+
 ```rust
 use wasm_bindgen::prelude::*;
 
@@ -91,6 +93,8 @@ pub fn greet() {
 
 class: rust-code
 
+.filename[src/lib.rs]
+
 ```rust
 *use wasm_bindgen::prelude::*;
 
@@ -107,11 +111,17 @@ pub fn greet() {
 
 ???
 
+* `wasm-bindgen` is the tool we use for facilitating communication between JS
+  and wasm
+  * "bindgen" = "bindings generator"
+  * more on this later in the talk
 * `use` is bringing `wasm-bindgen`'s common functionality into scope
 
 ---
 
 class: rust-code
+
+.filename[src/lib.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -130,11 +140,14 @@ pub fn greet() {
 ???
 
 * importing the `window.alert` function
+* `extern` = these functions exist, but I don't have the definition
 * `#[wasm_bindgen]` on an `extern` block creates imports at the `.wasm` level
 
 ---
 
 class: rust-code
+
+.filename[src/lib.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -160,6 +173,8 @@ pub fn greet() {
 
 class: rust-code
 
+.filename[src/lib.rs]
+
 ```rust
 use wasm_bindgen::prelude::*;
 
@@ -182,6 +197,8 @@ pub fn greet() {
 
 class: js-code
 
+.filename[index.js]
+
 ```js
 import { greet } from "./hello_world";
 
@@ -201,10 +218,9 @@ greet();
 
 <hr/>
 
-### ~~1. 🌍 Hello, World!~~
-### 2. 🤔 Why Rust and WebAssembly?
-### 3. 🏋 Using Rust and WebAssembly
-### 4. 🌭 How the Sausage is Made
+### 1. 🤔 Why Rust and WebAssembly?
+### 2. 🏋 Using Rust and WebAssembly
+### 3. 🌭 How the Sausage is Made
 
 ---
 
@@ -444,6 +460,8 @@ class: middle, center
 
 class: rust-code
 
+.filename[src/lib.rs]
+
 ```rust
 use wasm_bindgen::prelude::*;
 
@@ -485,7 +503,7 @@ class: center
 
 class: js-code
 
-### Generated JS for `greet`
+.filename[pkg/hello_world.js]
 
 ```js
 // ...
@@ -507,7 +525,7 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 class: js-code
 
-### Generated JS for `greet`
+.filename[pkg/hello_world.js]
 
 ```js
 // ...
@@ -531,7 +549,7 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 class: js-code
 
-### Generated JS for `greet`
+.filename[pkg/hello_world.js]
 
 ```js
 // ...
@@ -552,7 +570,7 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 class: js-code
 
-### Generated JS for `greet`
+.filename[pkg/hello_world.js]
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -577,7 +595,7 @@ export function greet() {
 
 class: js-code
 
-### Generated JS for `greet`
+.filename[pkg/hello_world.js]
 
 ```js
 *import * as wasm from './hello_world_bg';
@@ -601,7 +619,7 @@ export function greet() {
 
 class: js-code
 
-### Generated JS for `greet`
+.filename[pkg/hello_world.js]
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -631,8 +649,7 @@ export function greet() {
 
 class: rust-code
 
-### Get a DOM node, set its `textContent`
-<br/>
+.filename[src/lib.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -655,8 +672,7 @@ pub fn greet2(node: &Node) {
 
 class: rust-code
 
-### Get a DOM node, set its `textContent`
-<br/>
+.filename[src/lib.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -676,8 +692,7 @@ use wasm_bindgen::prelude::*;
 
 class: rust-code
 
-### Get a DOM node, set its `textContent`
-<br/>
+.filename[src/lib.rs]
 
 ```rust
 use wasm_bindgen::prelude::*;
@@ -697,8 +712,7 @@ pub fn greet2(node: &Node) {
 
 class: js-code
 
-### Get a DOM node, set its `textContent`
-<br/>
+.filename[index.js]
 
 ```js
 import { greet2 } from "./hello_world";
@@ -724,7 +738,7 @@ class: center
 
 class: js-code
 
-### Generated JS for `greet2`
+.filename[pkg/hello_world.js]
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -750,7 +764,7 @@ export function greet2(arg0) {
 
 class: js-code
 
-### Generated JS for `greet2`
+.filename[pkg/hello_world.js]
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -786,7 +800,7 @@ class: center
 
 class: rust-code
 
-### Taking ownership of DOM nodes
+.filename[src/lib.rs]
 
 ```rust
 thread_local! {
@@ -818,7 +832,7 @@ pub fn greet3(node: web_sys::Node) {
 
 class: rust-code
 
-### Taking ownership of DOM nodes
+.filename[src/lib.rs]
 
 ```rust
 thread_local! {
@@ -847,7 +861,7 @@ thread_local! {
 
 class: rust-code
 
-### Taking ownership of DOM nodes
+.filename[src/lib.rs]
 
 ```rust
 *thread_local! {
@@ -876,7 +890,7 @@ pub fn greet3(node: web_sys::Node) {
 
 class: rust-code
 
-### Taking ownership of DOM nodes
+.filename[src/lib.rs]
 
 ```rust
 thread_local! {
@@ -905,7 +919,7 @@ pub fn greet3(node: web_sys::Node) {
 
 class: rust-code
 
-### Taking ownership of DOM nodes
+.filename[src/lib.rs]
 
 ```rust
 thread_local! {
@@ -947,7 +961,7 @@ class: center
 
 class: js-code
 
-### Generated JS for `greet3`
+.filename[pkg/hello_world.js]
 
 ```js
 /// ...
@@ -968,7 +982,7 @@ export function greet3(arg0) {
 
 class: js-code
 
-### Generated JS for `greet3`
+.filename[pkg/hello_world.js]
 
 ```js
 /// ...
@@ -999,7 +1013,7 @@ class: middle, center
 
 class: rust-code
 
-### Exposing Rust `struct`s to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1027,7 +1041,7 @@ pub struct StreamingStats {
 
 class: rust-code
 
-### Exposing Rust `struct`s to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 *#[wasm_bindgen]
@@ -1045,7 +1059,7 @@ pub struct StreamingStats {
 
 class: rust-code
 
-### Exposing Rust `struct`s to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1064,7 +1078,7 @@ class: rust-code
 
 class: rust-code
 
-### Exposing Methods to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1081,7 +1095,7 @@ impl StreamingStats {
 
 class: rust-code
 
-### Exposing Methods to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 *#[wasm_bindgen]
@@ -1101,7 +1115,7 @@ impl StreamingStats {
 
 class: rust-code
 
-### Exposing Methods to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 // ...
@@ -1131,7 +1145,7 @@ impl StreamingStats {
 
 class: rust-code
 
-### Exposing Methods to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 // ...
@@ -1160,7 +1174,7 @@ impl StreamingStats {
 
 class: rust-code
 
-### Exposing a Constructor to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1186,7 +1200,7 @@ impl StreamingStats {
 
 class: rust-code
 
-### Exposing a Constructor to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1210,8 +1224,7 @@ impl StreamingStats {
 ---
 
 class: rust-code
-
-### Exposing a Constructor to JavaScript
+.filename[src/lib.rs]
 
 ```rust
 #[wasm_bindgen]
@@ -1246,7 +1259,7 @@ class: center
 
 class: js-code
 
-### Generated JS for `StreamingStats`
+.filename[pkg/streaming_stats.js]
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1277,7 +1290,7 @@ export class StreamingStats {
 
 class: js-code
 
-### Generated JS for `StreamingStats`
+.filename[pkg/streaming_stats.js]
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1311,7 +1324,7 @@ export class StreamingStats {
 
 class: js-code
 
-### Generated JS for `StreamingStats`
+.filename[pkg/streaming_stats.js]
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1344,7 +1357,7 @@ export class StreamingStats {
 
 class: js-code
 
-### Generated JS for `StreamingStats`
+.filename[pkg/streaming_stats.js]
 
 ```js
 import * as wasm from './hello_world_bg';
@@ -1380,7 +1393,7 @@ export class StreamingStats {
 
 class: js-code
 
-### Using `StreamingStats` from JavaScript
+.filename[index.js]
 
 ```js
 import { StreamingStats } from "./streaming_stats";
@@ -1404,7 +1417,7 @@ stats.free();
 
 class: js-code
 
-### Using `StreamingStats` from JavaScript
+.filename[index.js]
 
 ```js
 *import { StreamingStats } from "./streaming_stats";
@@ -1428,7 +1441,7 @@ stats.free();
 
 class: js-code
 
-### Using `StreamingStats` from JavaScript
+.filename[index.js]
 
 ```js
 import { StreamingStats } from "./streaming_stats";
@@ -1452,7 +1465,7 @@ stats.free();
 
 class: js-code
 
-### Using `StreamingStats` from JavaScript
+.filename[index.js]
 
 ```js
 import { StreamingStats } from "./streaming_stats";
@@ -1476,7 +1489,7 @@ stats.free();
 
 class: js-code
 
-### Using `StreamingStats` from JavaScript
+.filename[index.js]
 
 ```js
 import { StreamingStats } from "./streaming_stats";
@@ -1513,6 +1526,8 @@ class: js-code
 
 ### Component Lifecycle Hooks
 
+.filename[streaming-stats-element.js]
+
 ```js
 class StreamingStatsElement {
   connectedCallback() {
@@ -1538,8 +1553,10 @@ class: js-code
 
 ### `with` Functions
 
+.filename[with-streaming-stats.js]
+
 ```js
-function withStreamingStats(callback) {
+export function withStreamingStats(callback) {
   const stats = new StreamingStats();
   try {
     return callback(stats);
@@ -1565,10 +1582,13 @@ class: js-code
 
 ### `with` Functions
 
+.filename[index.js]
+
 ```js
 withStreamingStats(stats => {
-  for (let i = 0; i < 1000; i++)
+  for (let i = 0; i < 1000; i++) {
     stats.add(Math.random());
+  }
 
   console.log(stats.mean());
 });
@@ -1608,7 +1628,10 @@ class: center
 
 ---
 
-TODO
+TODO:
+
+* finish filename fixing up (give each example different file name)
+* https://gist.github.com/fitzgen/81a1a2fe8a66ce8f38e5281235c227c0
 
 ---
 
@@ -1629,7 +1652,7 @@ class: center
 template: inverse
 class: center
 
-# THANK YOU!!
+# THANK YOU!
 <br/>
 ### Nick Fitzgerald
 <br/>

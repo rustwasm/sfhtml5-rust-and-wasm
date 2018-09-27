@@ -79,6 +79,8 @@ greet();
 
 ???
 
+* what is "hello world" of integrating with JS?
+  * importing a function with ES modules!
 * Rust-generated wasm is consumable as an ES module
 * just looking at this, we can't tell if the `"./hello_world"` module is JS or
   wasm
@@ -106,7 +108,7 @@ pub fn greet() {
 
 ???
 
-* dive into hello world
+* let's look at how we implement that JS interface with Rust and Wasm
 
 ---
 
@@ -214,6 +216,12 @@ pub fn greet() {
 
 ---
 
+class: center
+
+[![](./public/img/hello-world.png)](./public/img/hello-world.png)
+
+---
+
 # 🗺 Roadmap
 
 <hr/>
@@ -225,6 +233,7 @@ pub fn greet() {
 ---
 
 class: middle, center
+exclude: true
 
 <video src="./public/img/why.mp4" autoplay="" loop="" playsinline=""></video>
 
@@ -287,14 +296,9 @@ function decodeVlq(input, out) {
 * this example: reuse `out` object on every call = no allocation on every call
   * in theory, JITs *could* optimize the allocation away with escape analysis,
     but we found that it was not consistently happening across all JS engines
-
----
-
-# Idiomatic vs. Fast
-
-* `return -1;` instead of `throw new Error`
-* JIT's type inference not recognizing "shapes" it should have
-* Custom Quick Sort implementation to allow inlining comparator function
+* other examples:
+  * `return -1;` instead of `throw new Error`
+  * Custom Quick Sort implementation to allow inlining comparator function
 
 ---
 
@@ -347,7 +351,7 @@ class: center, middle
 * Rust has "zero-overhead abstractions"
   * Example 1: if we tried to make a `Result` type in JS, it implies heap
     allocation
-  * Example 2: array protocol in JS vs rust
+  * Example 2: iteration protocol in JS vs rust
     * inlined functions
     * no allocations
   * Example 3: a function that is generic over some type, monomorphized it is as
@@ -385,14 +389,37 @@ class: middle, center
 * Ultimately:
   * still have to rely on profiling!
   * algorithms are still important!
-  * JS performance tuning
-      * finicky
-      * need to know JS implementation and internals
+  * JS performance tuning finicky
+      * need to know JS engine implementation and JIT internals
       * working without abstractions
   * Rust
       * idioms guide us towards performant code
       * don't give up abstraction to get speed
       * Don't have to be JIT wizards to get fast code
+
+---
+
+### 🛠 Top-notch tooling (e.g. `cargo`)
+### 🤸 Strong safety net
+### 😍 Welcoming, inclusive community
+
+???
+
+* C++ also has zero-overhead abstractions
+  * its possible to get similar results in C++
+* where Rust stands out:
+  * top-notch tooling; `cargo` for dependency management, easy to get started
+    with wasm
+  * Rust's ownership and lifetime type system lets you:
+      * push the envelope
+      * reach further
+      * but at the same time: you won't spend lots of time debugging heap
+        corruption
+  * community strives to be
+      * welcoming
+      * inclusive
+      * empower developers from a variety of backgrounds
+      * for example, JS developers who haven't done systems programming before
 
 ---
 
@@ -404,10 +431,12 @@ class: middle, center
 
 ???
 
-* but the source-map experience also showed us what we needed to work on some
-  more: toolchain integration
-* source-map work was done in late december/january last year, have been doing a
-  lot of toolchain integration since and I think it shows
+* Rust on native has core tenet of inter-operating with C code
+  * or anything else that speaks "C"
+* Rust on wasm has core tenet of inter-operating with JS
+* Keep using bundlers like webpack you know and love
+* Keep using NPM for dependencies
+  * rust+wasm will create NPM dependencies and consume them
 
 ---
 
@@ -433,16 +462,6 @@ exclude: true
       * you have to include a whole 'nother GC and language runtime in the wasm
       * your download size explodes
       * and page loads take forever
-
----
-
-### 🛠 Top-notch tooling (e.g. `cargo`)
-### 🤸 Strong safety net
-### 😍 Welcoming, inclusive community
-
-???
-
-* compared
 
 ---
 
@@ -499,7 +518,7 @@ pub fn greet() {
 
 ???
 
-* take deeper look at hello world
+* revisit "hello world" and look closer at workflow
 
 ---
 
@@ -538,8 +557,9 @@ export function __wbg_alert_2c86be282863e459(arg0, arg1) {
 
 ???
 
-* generated JS file has glue for wrapping imported functions and translating
-  their arguments into something that wasm-bindgen can understand
+* the Rust code imported `window.alert`
+* so generated JS has glue for wrapping imported functions and translating their
+  arguments from numbers to JS things
 
 ---
 
@@ -1035,6 +1055,8 @@ class: middle, center
 ## Rust's ownership model helps us optimize Wasm ↔ JavaScript
 
 ---
+
+* TODO: mean = sum(samples) / count(samples)
 
 ---
 
@@ -1651,13 +1673,7 @@ class: center
 
 ---
 
-TODO:
-
-* https://gist.github.com/fitzgen/81a1a2fe8a66ce8f38e5281235c227c0
-* more focus on _rust_ and wasm
-* show hello world alert
-* conclude and hammer home points
-* s/deeper dive/what happens for you for integration/
+## TODO
 
 ---
 
@@ -1666,9 +1682,39 @@ TODO:
 
 ---
 
+## In Conclusion:
+
+<br/>
+
+##### Use Rust and Wasm to speed up your performance-sensitive JavaScript
+
+--
+
+##### Augment JS, don't replace it
+
+--
+
+##### `wasm-pack` makes Rust and Wasm easy to build, test, and publish to NPM
+
+--
+
+##### `wasm-bindgen` provides zero-overhead abstractions for communicating between Wasm and JavaScript
+
+---
+
 class: center
 
 # Learn more at [rustwasm.github.io/book](https://rustwasm.github.io/book)
+
+???
+
+* short book on rust+wasm development
+* game of life tutorial
+* debugging
+* time profiling
+* code size profiling
+* publishing to NPM
+* more
 
 ---
 

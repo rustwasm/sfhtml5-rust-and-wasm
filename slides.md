@@ -43,7 +43,7 @@ template: inverse
 
 ???
 
-* This is the ideal we're aiming for, if not the reality in all cases yet.
+* This is the ideal we're aiming for
 
 ---
 
@@ -134,7 +134,6 @@ pub fn greet() {
 
 * `wasm-bindgen` is the tool we use for facilitating communication between JS
   and wasm
-  * "bindgen" = "bindings generator"
   * more on this later in the talk
 * `use` is bringing `wasm-bindgen`'s common functionality into scope
 
@@ -344,20 +343,17 @@ class: center, middle
 
 ???
 
-* when making JS fast, end up writing "C" inside JS
-  * but without even the abstractions C offers, such as `struct`s and naming things
-  * because those abstractions are not without overhead in JS
-  * imply allocations, for example
-* Rust has "zero-overhead abstractions"
-  * Example 1: if we tried to make a `Result` type in JS, it implies heap
-    allocation
-  * Example 2: iteration protocol in JS vs rust
-    * inlined functions
-    * no allocations
-  * Example 3: a function that is generic over some type, monomorphized it is as
-    if you wrote versions specialized to the generic input by hand
-* also extends to `.wasm` code size as well
-  * built-in tree shaking and dead code elimination
+* Example: iteration protocol in JS vs rust
+  * chained `.map(..)` and `.filter(..)`
+  * with JS:
+      * implicitly heap allocating intermediate protocol objects that say if
+        iteration is done or not, and have the next element in the iteration
+      * maybe inlining each mapped or filtered function, maybe not
+      * generally faster to use a C-style `for (i=0; i<n; i++)` loop
+  * on the other hand, Rust
+      * is not heap allocating intermediate objects
+      * can boil away the iterators into the same code generated for a C-style
+        `for` loop or better
 
 ---
 
@@ -385,17 +381,16 @@ class: middle, center
 * and this is *after* we had already spent time optimizing the pure-JS over the
   years
 * relative standard deviations fell: samples are much tighter together now
-* still a JS library! just core compute-bound kernel in rust+wasm
 * Ultimately:
+  * still a JS library! just core compute-bound kernel in rust+wasm
   * still have to rely on profiling!
   * algorithms are still important!
   * JS performance tuning finicky
       * need to know JS engine implementation and JIT internals
       * working without abstractions
-  * Rust
+  * Rust and Wasm: speed without wizardry
       * idioms guide us towards performant code
       * don't give up abstraction to get speed
-      * Don't have to be JIT wizards to get fast code
 
 ---
 
@@ -409,8 +404,9 @@ class: center
 
 * C++ also has zero-overhead abstractions
 * where Rust stands out:
-  * top-notch tooling; `cargo` for dependency management, easy to get started
-    with wasm
+  * top-notch tooling that JS devs expect; `cargo` for dependency management, easy to get wasm environment up and running
+      * compare this to adding dep on external C++ library: `autoconf`,
+        `configure` scripts, `make`. `cmake` if you're lucky
 
 ---
 
@@ -421,11 +417,11 @@ class: center
 
 ???
 
-* Rust's ownership and lifetime type system lets you:
+* safety net that is Rust's ownership and lifetime type system lets you:
   * push the envelope
-  * reach further
+  * be more ambitious with your code: perform less copies/allocation
   * but at the same time: you won't spend lots of time debugging heap
-    corruption
+    corruption b/c compiler has your back
 
 ---
 
@@ -439,53 +435,36 @@ class: center
 
 ???
 
-* community strives to be
+* the Rust community strives to be
   * welcoming
   * inclusive
-  * empower developers from a variety of backgrounds
-  * for example, JS developers who haven't done systems programming before
+  * empower developers from a variety of backgrounds who haven't done
+    systems programming before
+  * for example, JS developers
 
 ---
+
+template: none
+class: middle
+
+<img src="./public/img/animal-bros.jpg" style="float:right; max-width: 50%; margin: .5em"/>
 
 ## Plays Well With Others
 <br/>
 #### ✔ Integrates with bundlers
 #### ✔ Publish to NPM
-<video style="margin: 0 auto; display: block" src="./public/img/lion-dog-kiss.mp4" autoplay="" loop="" playsinline=""></video>
+
+.footnote[[instagram.com/henrythecoloradodog](https://www.instagram.com/henrythecoloradodog/)]
 
 ???
 
+* final differentiator is playing well with others and integrating with the
+  larger ecosystem
 * Rust on native has core tenet of inter-operating with C code
-  * or anything else that speaks "C"
 * Rust on wasm has core tenet of inter-operating with JS
 * Keep using bundlers like webpack you know and love
 * Keep using NPM for dependencies
   * rust+wasm will create NPM dependencies and consume them
-
----
-
-exclude: true
-
-## Small `.wasm` Sizes
-<br/>
-#### *Example:* Using `document.querySelectorAll` doesn't pull in code for `window.alert`
-<br/>
-> What you don’t use, you don’t pay for.
-
-???
-
-* like tree shaking in JS
-* some of this at `lld` level
-* but carried through the rest of ecosystem as a design constraint as well
-  * rustc
-  * wasm-bindgen
-  * js-sys
-  * web-sys
-* crucial for integration with JS:
-  * it doesn't make sense to port one function / module to wasm if that means:
-      * you have to include a whole 'nother GC and language runtime in the wasm
-      * your download size explodes
-      * and page loads take forever
 
 ---
 
@@ -513,7 +492,7 @@ class: middle, center
 
 * facilitates communication between wasm and JS
 * "bindgen" = "bindings generator"
-* exported wasm functions only take primitive number types
+* raw wasm functions only take and return primitive number types
   * but we want to pass strings, objects, DOM nodes, etc
   * wasm-bindgen enables that, all with the zero-overhead abstraction principle
     we keep revisiting
@@ -1091,7 +1070,24 @@ class: middle, center
 
 ---
 
-* TODO: mean = sum(samples) / count(samples)
+## Streaming Statistics in Rust
+<br/>
+### Don't keep every sample in memory
+### `mean = sum(samples) / count(samples)`
+
+???
+
+* let's take a look at a slightly more involved example: exposing a Rust
+  struct+methods to JS
+* this example is going to track some statistics in streaming fashion
+  * not keeping all samples around, hogging a bunch of memory
+      * mean = sum of samples / number of samples
+      * can just store
+          1. sum of samples and
+          2. number of samples
+      * and then compute mean without every sample all at the same time
+  * maybe useful for an FPS counter or something like that
+  * we could also compute variance, stddev, min, max, etc
 
 ---
 
@@ -1115,17 +1111,7 @@ stats.free();
 
 ???
 
-* let's take a look at a slightly more involved example: exposing a Rust
-  struct+methods to JS
-* this example is going to track some statistics in streaming fashion
-  * not keeping all samples around, hogging a bunch of memory
-      * mean = sum of samples / number of samples
-      * can just store
-        1. sum of samples and
-        2. number of samples
-      * and then compute mean without every sample all at the same time
-  * maybe useful for an FPS counter or something like that
-  * we could also compute variance, stddev, min, max, etc
+* how would we ideally like to use a `StreamingStats` class?
 
 ---
 
@@ -1424,7 +1410,8 @@ impl StreamingStats {
 
 ???
 
-* static `new` function that returns `Self` type
+* static `new` method that returns `StreamingStats`
+* Rust doesn't have constructors, just static methods and `struct` literals
 
 ---
 
@@ -1695,6 +1682,8 @@ class: center
 
 ---
 
+exclude: true
+
 class: center
 
 # How it's Made
@@ -1708,9 +1697,22 @@ class: center
 
 ---
 
-## TODO
+exclude: true
+
+template: inverse
+class: center
+
+<img src="./public/img/alert.png" style="max-width:30%; max-height:30%" class="inverse" />
+
+# Numbers Only
+
+???
+
+* TODO
 
 ---
+
+exclude: true
 
 * wish that WebIDL would specify whether buffer source is const or not
 * wish that TypeScript included whether a method throws or not
@@ -1721,19 +1723,23 @@ class: center
 
 <br/>
 
-##### Use Rust and Wasm to speed up your performance-sensitive JavaScript
+##### ⚡ Use Rust and Wasm to speed up perf-sensitive JS
 
 --
 
-##### Augment JS, don't replace it
+##### 💖 Rust and Wasm integrates with your JS toolchain
 
 --
 
-##### `wasm-pack` makes Rust and Wasm easy to build, test, and publish to NPM
+##### ✨ `wasm-pack` makes it easy to build, test, and publish to NPM
 
 --
 
-##### `wasm-bindgen` provides zero-overhead abstractions for communicating between Wasm and JavaScript
+##### 💬 `wasm-bindgen` enables Wasm ↔ JavaScript communication
+
+???
+
+* that follows the zero-overhead abstractions principle
 
 ---
 
@@ -1745,6 +1751,7 @@ class: center
 
 * short book on rust+wasm development
 * game of life tutorial
+* designing code for rust+wasm
 * debugging
 * time profiling
 * code size profiling

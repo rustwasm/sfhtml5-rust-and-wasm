@@ -399,27 +399,51 @@ class: middle, center
 
 ---
 
-### 🛠 Top-notch tooling (e.g. `cargo`)
-### 🤸 Strong safety net
-### 😍 Welcoming, inclusive community
+class: center
+
+.tiny[![tooling](./public/img/tools.png)]
+# Top-notch tooling
+###e.g. `cargo`
 
 ???
 
 * C++ also has zero-overhead abstractions
-  * its possible to get similar results in C++
 * where Rust stands out:
   * top-notch tooling; `cargo` for dependency management, easy to get started
     with wasm
-  * Rust's ownership and lifetime type system lets you:
-      * push the envelope
-      * reach further
-      * but at the same time: you won't spend lots of time debugging heap
-        corruption
-  * community strives to be
-      * welcoming
-      * inclusive
-      * empower developers from a variety of backgrounds
-      * for example, JS developers who haven't done systems programming before
+
+---
+
+class: center
+
+.tiny[![cartwheel](./public/img/cartwheel.png)]
+# Strong safety net
+
+???
+
+* Rust's ownership and lifetime type system lets you:
+  * push the envelope
+  * reach further
+  * but at the same time: you won't spend lots of time debugging heap
+    corruption
+
+---
+
+class: center
+
+.tiny[![hearteyes](public/img/hearteyes.png)]
+.tiny[![nerd](public/img/nerd.png)]
+.tiny[![stareyes](public/img/stareyes.png)]
+
+# Welcoming, inclusive community
+
+???
+
+* community strives to be
+  * welcoming
+  * inclusive
+  * empower developers from a variety of backgrounds
+  * for example, JS developers who haven't done systems programming before
 
 ---
 
@@ -532,11 +556,22 @@ class: center
 
 * `wasm-pack build` generates:
   * a `.wasm` file, containing your Rust compiled to wasm
-  * a JS file that provides nice JS APIs to your Rust code
+  * a JS glue file that provides nice JS APIs to your Rust code
   * a TypeScript interface definition file for type checking your JS/TS and
     getting autocompletions
   * a `package.json` for integrating with JS tooling, bundlers, publishing to
     NPM, etc...
+
+---
+
+class: center, middle
+
+![](./public/img/wasm-bindgen-code-communication.png)
+
+???
+
+* your JS interacts with the wasm through the generated JS glue code
+* the wasm interacts with DOM/HTML5/Node/etc APIs through the generated JS glue
 
 ---
 

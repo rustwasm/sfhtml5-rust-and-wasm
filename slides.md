@@ -82,8 +82,7 @@ greet();
 * what is "hello world" of integrating with JS?
   * importing a function with ES modules!
 * Rust-generated wasm is consumable as an ES module
-* just looking at this, we can't tell if the `"./hello_world"` module is JS or
-  wasm
+* just looking at this, we can't tell if the module is JS or wasm
   * this is the level of transparent, it-just-works integration we aim for
 
 ---
@@ -108,7 +107,8 @@ pub fn greet() {
 
 ???
 
-* let's look at how we implement that JS interface with Rust and Wasm
+* Here is how we implement that JS interface with Rust and Wasm
+* if you don't know any Rust, don't worry we'll go through this bit by bit
 
 ---
 
@@ -221,12 +221,12 @@ class: center
 
 ---
 
-# 🗺 Roadmap
+# <img src="./public/img/world-map.png" style="max-width:1em; max-height:1em"/>  Roadmap
 
 <hr/>
 
 ### 1. 🤔 Why Rust and WebAssembly?
-### 2. 🏋 Using Rust and WebAssembly
+### 2. <img src="./public/img/woman-lifting.png" style="max-width:1em; max-height:1em"/> Using Rust and WebAssembly
 ### 3. 🌭 How the Sausage is Made
 
 ---
@@ -255,6 +255,7 @@ class: middle, center
 
 ???
 
+* back in january, we sped up the `source-map` library by integrating Rust+Wasm
 * motivating example: speeding up the `source-map` library by integrating
   rust+wasm
 * source maps are debug info format for the Web
@@ -330,9 +331,14 @@ class: center, middle
 #### ✔ Monomorphization vs. dynamic dispatch
 #### ✔ Function inlining
 
+???
+
+* deterministic, reliable, consistent performance
+* no GC pauses
+
 ---
 
-## Zero-overhead abstractions
+## Zero-cost abstractions
 
 <br/>
 
@@ -402,7 +408,7 @@ class: center
 
 ???
 
-* C++ also has zero-overhead abstractions
+* C++ also has zero-cost abstractions
 * where Rust stands out:
   * top-notch tooling that JS devs expect; `cargo` for dependency management, easy to get wasm environment up and running
       * compare this to adding dep on external C++ library: `autoconf`,
@@ -494,7 +500,7 @@ class: middle, center
 * "bindgen" = "bindings generator"
 * raw wasm functions only take and return primitive number types
   * but we want to pass strings, objects, DOM nodes, etc
-  * wasm-bindgen enables that, all with the zero-overhead abstraction principle
+  * wasm-bindgen enables that, all with the zero-cost abstraction principle
     we keep revisiting
   * generates JS glue you would otherwise have to write by hand
 
@@ -1707,7 +1713,7 @@ exclude: true
 
 <br/>
 
-##### ⚡ Use Rust and Wasm to speed up perf-sensitive JS
+##### <img src="./public/img/high-voltage.png" style="max-width:1em; max-height:1em"/>  Use Rust and Wasm to speed up perf-sensitive JS
 
 --
 
@@ -1723,7 +1729,7 @@ exclude: true
 
 ???
 
-* that follows the zero-overhead abstractions principle
+* that follows the zero-cost abstractions principle
 
 ---
 

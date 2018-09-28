@@ -1281,22 +1281,6 @@ impl StreamingStats {
 ???
 
 * let's also add a constructor and some methods
-
----
-
-class: rust-code
-
-.filename[src/streaming_stats.rs]
-
-```rust
-*#[wasm_bindgen]
-impl StreamingStats {
-    // ...
-}
-```
-
-???
-
 * to expose methods:
   * throw `#[wasm_bindgen]` on an impl block
   * then any `pub` method inside will be exposed to JS as well
